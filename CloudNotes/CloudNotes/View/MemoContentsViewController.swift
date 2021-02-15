@@ -4,6 +4,7 @@ class MemoContentsViewController: UIViewController {
     let textView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.dataDetectorTypes = UIDataDetectorTypes.all
         return textView
     }()
 
