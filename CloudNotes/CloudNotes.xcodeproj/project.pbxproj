@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A5F03A525DA97A8008F5E7E /* DecodeJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5F03A425DA97A8008F5E7E /* DecodeJSON.swift */; };
 		9AB95B2025DA79E4004F7826 /* MemoListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B1F25DA79E4004F7826 /* MemoListTableViewCell.swift */; };
 		9AB95B2825DA7A60004F7826 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B2725DA7A60004F7826 /* Memo.swift */; };
 		9AB95B3025DA7E29004F7826 /* MemoListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B2F25DA7E29004F7826 /* MemoListTableViewController.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9A5F03A425DA97A8008F5E7E /* DecodeJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeJSON.swift; sourceTree = "<group>"; };
 		9AB95B1F25DA79E4004F7826 /* MemoListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewCell.swift; sourceTree = "<group>"; };
 		9AB95B2725DA7A60004F7826 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		9AB95B2F25DA7E29004F7826 /* MemoListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A5F03A925DA97E1008F5E7E /* Decoding */ = {
+			isa = PBXGroup;
+			children = (
+				9A5F03A425DA97A8008F5E7E /* DecodeJSON.swift */,
+			);
+			path = Decoding;
+			sourceTree = "<group>";
+		};
 		9AB95B3925DA7F00004F7826 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +181,7 @@
 				9AB95B3A25DA8024004F7826 /* View */,
 				9AB95B3C25DA8064004F7826 /* ViewController */,
 				9AB95B4925DA82C9004F7826 /* Error */,
+				9A5F03A925DA97E1008F5E7E /* Decoding */,
 				9AB95B3D25DA8087004F7826 /* Supporting Files */,
 			);
 			path = CloudNotes;
@@ -331,6 +342,7 @@
 				9AB95B2825DA7A60004F7826 /* Memo.swift in Sources */,
 				9AB95B3525DA7ED3004F7826 /* MemoContentsViewController.swift in Sources */,
 				C7481C7025BBCF3900B9CA55 /* SceneDelegate.swift in Sources */,
+				9A5F03A525DA97A8008F5E7E /* DecodeJSON.swift in Sources */,
 				C7481C7825BBCF3900B9CA55 /* CloudNotes.xcdatamodeld in Sources */,
 				9AB95B3025DA7E29004F7826 /* MemoListTableViewController.swift in Sources */,
 			);

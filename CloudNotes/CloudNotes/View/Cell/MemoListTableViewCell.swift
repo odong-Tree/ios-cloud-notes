@@ -1,16 +1,63 @@
 import UIKit
 
 class MemoListTableViewCell: UITableViewCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    
+    static let identifier = "MemoListTableViewCell"
+    
+    let listTitle: UILabel = {
+        let listTitle = UILabel()
+        listTitle.translatesAutoresizingMaskIntoConstraints = false
+        listTitle.font = .preferredFont(forTextStyle: .headline)
+        return listTitle
+    }()
+    
+    let listDate: UILabel = {
+        let listDate = UILabel()
+        listDate.translatesAutoresizingMaskIntoConstraints = false
+        listDate.font = .preferredFont(forTextStyle: .body)
+        return listDate
+    }()
+    
+    let listBody: UILabel = {
+        let listBody = UILabel()
+        listBody.translatesAutoresizingMaskIntoConstraints = false
+        listBody.font = .preferredFont(forTextStyle: .body)
+        listBody.textColor = .gray
+        return listBody
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        addContentView()
+        configureAutoLayout()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private func addContentView() {
+        contentView.addSubview(listTitle)
+        contentView.addSubview(listDate)
+        contentView.addSubview(listBody)
+    }
+    
+    private func configureAutoLayout() {
+        NSLayoutConstraint.activate([
+            listTitle.topAnchor.constraint(equalTo: self.topAnchor),
+            listTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            
+            listDate.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
+            listDate.leadingAnchor.constraint(equalTo: listTitle.leadingAnchor),
+            listDate.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            listDate.heightAnchor.constraint(equalTo: listBody.heightAnchor),
+            
+            listBody.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
+            listBody.leadingAnchor.constraint(equalTo: listDate.trailingAnchor, constant: 10),
+            listBody.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            listBody.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            listBody.heightAnchor.constraint(equalTo: listDate.heightAnchor)
+        ])
+    }
 }
