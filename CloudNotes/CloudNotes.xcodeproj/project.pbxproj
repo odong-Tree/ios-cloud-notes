@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9A5F03A525DA97A8008F5E7E /* DecodeJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5F03A425DA97A8008F5E7E /* DecodeJSON.swift */; };
+		9AA167FB25DB84230038285C /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA167FA25DB84230038285C /* NavigationViewController.swift */; };
 		9AB95B2025DA79E4004F7826 /* MemoListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B1F25DA79E4004F7826 /* MemoListTableViewCell.swift */; };
 		9AB95B2825DA7A60004F7826 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B2725DA7A60004F7826 /* Memo.swift */; };
 		9AB95B3025DA7E29004F7826 /* MemoListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB95B2F25DA7E29004F7826 /* MemoListTableViewController.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		9A5F03A425DA97A8008F5E7E /* DecodeJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeJSON.swift; sourceTree = "<group>"; };
+		9AA167FA25DB84230038285C /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		9AB95B1F25DA79E4004F7826 /* MemoListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewCell.swift; sourceTree = "<group>"; };
 		9AB95B2725DA7A60004F7826 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		9AB95B2F25DA7E29004F7826 /* MemoListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				C7481C7125BBCF3900B9CA55 /* MemoViewController.swift */,
+				9AA167FA25DB84230038285C /* NavigationViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AB95B2025DA79E4004F7826 /* MemoListTableViewCell.swift in Sources */,
+				9AA167FB25DB84230038285C /* NavigationViewController.swift in Sources */,
 				C7481C7225BBCF3900B9CA55 /* MemoViewController.swift in Sources */,
 				C7481C6E25BBCF3900B9CA55 /* AppDelegate.swift in Sources */,
 				9AB95B4525DA82BF004F7826 /* MemoAppError.swift in Sources */,
