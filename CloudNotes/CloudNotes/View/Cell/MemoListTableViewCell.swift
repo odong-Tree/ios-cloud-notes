@@ -45,18 +45,19 @@ class MemoListTableViewCell: UITableViewCell {
     
     private func configureAutoLayout() {
         NSLayoutConstraint.activate([
-            listTitle.topAnchor.constraint(equalTo: self.topAnchor),
-            listTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            listTitle.topAnchor.constraint(equalTo: contentView.topAnchor),
+            listTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            listTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             listDate.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
             listDate.leadingAnchor.constraint(equalTo: listTitle.leadingAnchor),
-            listDate.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            listDate.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             listDate.heightAnchor.constraint(equalTo: listBody.heightAnchor),
             
             listBody.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
-            listBody.leadingAnchor.constraint(equalTo: listDate.trailingAnchor, constant: 10),
-            listBody.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            listBody.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            listBody.leadingAnchor.constraint(equalTo: listDate.trailingAnchor, constant: 80),
+            listBody.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            listBody.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             listBody.heightAnchor.constraint(equalTo: listDate.heightAnchor)
         ])
     }

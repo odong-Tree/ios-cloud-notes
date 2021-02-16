@@ -6,7 +6,7 @@ struct Memo: Decodable {
     private let lastModified: Int
     
     var lastModifiedDate: Date {
-        return Date(timeIntervalSinceReferenceDate: TimeInterval(lastModified))
+        return Date(timeIntervalSince1970: TimeInterval(lastModified))
     }
     
     enum CodingKeys: String, CodingKey {

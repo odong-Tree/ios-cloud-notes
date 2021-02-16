@@ -57,13 +57,18 @@ extension MemoListTableViewController: UITableViewDataSource, UITableViewDelegat
         cell.listTitle.text = self.memoList[indexPath.row].title
         cell.listDate.text = convertDateToString(date: self.memoList[indexPath.row].lastModifiedDate)
         cell.listBody.text = self.memoList[indexPath.row].body
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func convertDateToString(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "yyyy.MM.dd"
         return dateFormatter.string(from: date)
     }
 }
