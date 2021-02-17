@@ -5,7 +5,6 @@ class MemoContentsViewController: UIViewController {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.dataDetectorTypes = UIDataDetectorTypes.all
-        textView.backgroundColor = .green
         return textView
     }()
     

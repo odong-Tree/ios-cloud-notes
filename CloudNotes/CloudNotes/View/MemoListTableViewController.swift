@@ -1,6 +1,8 @@
 import UIKit
 
 class MemoListTableViewController: UIViewController {
+    let memoContentsView = MemoContentsViewController()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -64,6 +66,29 @@ extension MemoListTableViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let savedTraitCollection = UITraitCollection.current
+        
+        switch (savedTraitCollection.horizontalSizeClass) {
+        case (.regular):
+            memoContentsView.textView.largeContentTitle = self.memoList[indexPath.row].title
+            memoContentsView.textView.text = self.memoList[indexPath.row].body
+            
+            //텍스트 뷰 리로드
+            
+        case (.compact):
+            memoContentsView.textView.largeContentTitle = self.memoList[indexPath.row].title
+            memoContentsView.textView.text = self.memoList[indexPath.row].body
+            
+            self.navigationController?.pushViewController(memoContentsView, animated: true)
+            
+        default: break
+        }
+//
+//        memoContentsView.textView.largeContentTitle = self.memoList[indexPath.row].title
+//        memoContentsView.textView.text = self.memoList[indexPath.row].body
+//
+//        self.navigationController?.pushViewController(memoContentsView, animated: true)
     }
     
     func convertDateToString(date: Date) -> String {

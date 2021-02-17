@@ -1,7 +1,6 @@
 import UIKit
 
 class MemoListTableViewCell: UITableViewCell {
-    
     static let identifier = "MemoListTableViewCell"
     
     let listTitle: UILabel = {
@@ -17,7 +16,7 @@ class MemoListTableViewCell: UITableViewCell {
         listDate.font = .preferredFont(forTextStyle: .body)
         return listDate
     }()
-    
+
     let listBody: UILabel = {
         let listBody = UILabel()
         listBody.translatesAutoresizingMaskIntoConstraints = false
@@ -52,13 +51,11 @@ class MemoListTableViewCell: UITableViewCell {
             listDate.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
             listDate.leadingAnchor.constraint(equalTo: listTitle.leadingAnchor),
             listDate.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            listDate.heightAnchor.constraint(equalTo: listBody.heightAnchor),
             
             listBody.topAnchor.constraint(equalTo: listTitle.bottomAnchor),
-            listBody.leadingAnchor.constraint(equalTo: listDate.trailingAnchor, constant: 80),
+            listBody.leadingAnchor.constraint(equalTo: listDate.trailingAnchor, constant: 40),
             listBody.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            listBody.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            listBody.heightAnchor.constraint(equalTo: listDate.heightAnchor)
+            listBody.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }
