@@ -62,6 +62,12 @@ class MemoListTableViewController: UITableViewController {
         memoList.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
         selectedMemo = 0
+        
+        let memoContentsView = MemoContentsViewController()
+        memoContentsView.receiveText(memo: memoList[0])
+        self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        
+        isCellSelected = true
     }
 }
 
