@@ -58,7 +58,7 @@ class MemoListTableViewController: UITableViewController {
     
     private func deleteMemo() {
         let indexPath = IndexPath(row: 0, section: 0)
-        memoList.remove(at: indexPath.item)
+        memoList.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
     }
 }
@@ -104,7 +104,7 @@ extension MemoListTableViewController {
         let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         let shareAction = UIAlertAction(title: "Share", style: .default, handler: {
-            (action: UIAlertAction) in print("share 선택 -> 액티비티뷰 전환")
+            (action: UIAlertAction) in self.showActivityView(title: self.memoList[0].title, body: self.memoList[0].body, date: self.memoList[0].lastModifiedDateString)
         })
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
@@ -132,5 +132,15 @@ extension MemoListTableViewController {
         deleteMenu.addAction(deleteAction)
         
         present(deleteMenu, animated: true, completion: nil)
+    }
+}
+
+// MARK: UIActivityViewController
+extension MemoListTableViewController {
+    private func showActivityView(title: String, body: String, date: String) {
+        let memoToShare = [title, body, date]
+        let activityViewController = UIActivityViewController(activityItems: memoToShare, applicationActivities: nil)
+        
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
