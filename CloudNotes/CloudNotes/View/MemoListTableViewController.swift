@@ -65,8 +65,10 @@ class MemoListTableViewController: UITableViewController {
         
         let memoContentsView = MemoContentsViewController()
         memoContentsView.receiveText(memo: memoList[0])
-        self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
         
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        }
         isCellSelected = true
     }
 }
