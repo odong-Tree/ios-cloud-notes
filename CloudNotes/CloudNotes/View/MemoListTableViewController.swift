@@ -10,7 +10,7 @@ class MemoListTableViewController: UITableViewController {
         
         configureNavigationBar()
         tableView.register(MemoListTableViewCell.self, forCellReuseIdentifier: "MemoCell")
-  
+        
         NotificationCenter.default.addObserver(self, selector: #selector(changeIsCellSelected), name: NSNotification.Name("ShowTableView"), object: nil)
     }
     
@@ -53,7 +53,7 @@ class MemoListTableViewController: UITableViewController {
     }
     
     @objc func showActionSheet(sender: UIButton) {
-        
+        showActionSheetMessage()
     }
 }
 
@@ -92,5 +92,27 @@ extension MemoListTableViewController {
         
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func showActionSheetMessage() {
+        let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        
+        let shareAction = UIAlertAction(title: "Share", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        actionMenu.addAction(shareAction)
+        actionMenu.addAction(deleteAction)
+        actionMenu.addAction(cancelAction)
+        
+        self.present(actionMenu, animated: true, completion: nil)
     }
 }
