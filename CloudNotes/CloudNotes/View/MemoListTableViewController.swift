@@ -4,6 +4,7 @@ class MemoListTableViewController: UITableViewController {
     var memoList = [Memo]()
     var isCellSelected: Bool = false
     private let plusButton = UIButton()
+    private var selectedMemo: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +58,10 @@ class MemoListTableViewController: UITableViewController {
     }
     
     private func deleteMemo() {
-        let indexPath = IndexPath(row: 0, section: 0)
+        let indexPath = IndexPath(row: selectedMemo, section: 0)
         memoList.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
+        selectedMemo = 0
     }
 }
 
@@ -71,6 +73,7 @@ extension MemoListTableViewController {
         self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
         
         isCellSelected = true
+        selectedMemo = indexPath.row
     }
 }
 
@@ -103,8 +106,8 @@ extension MemoListTableViewController {
     private func showActionSheetMessage() {
         let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        let shareAction = UIAlertAction(title: "Share", style: .default, handler: {
-            (action: UIAlertAction) in self.showActivityView(title: self.memoList[0].title, body: self.memoList[0].body, date: self.memoList[0].lastModifiedDateString)
+        let shareAction = UIAlertAction(title: "Share", style: .default, handler: { [self]
+            (action: UIAlertAction) in showActivityView(title: memoList[selectedMemo].title, body: memoList[selectedMemo].body, date: memoList[selectedMemo].lastModifiedDateString)
         })
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
