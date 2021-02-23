@@ -3,7 +3,7 @@ import UIKit
 class MemoListTableViewController: UITableViewController {
     var memoList = [Memo]()
     var isCellSelected: Bool = false
-    private let enrollButton = UIButton()
+    private let plusButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +29,14 @@ class MemoListTableViewController: UITableViewController {
     
     private func configureNavigationBar() {
         navigationItem.title = "메모"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: enrollButton)
-        enrollButton.translatesAutoresizingMaskIntoConstraints = false
-        enrollButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: plusButton)
+        configurePlusButton()
+    }
+    
+    private func configurePlusButton() {
+        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        plusButton.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,6 +50,10 @@ class MemoListTableViewController: UITableViewController {
         cell.receiveLabelsText(memo: memoList[indexPath.row])
         
         return cell
+    }
+    
+    @objc func showActionSheet(sender: UIButton) {
+        
     }
 }
 

@@ -1,4 +1,5 @@
 import UIKit
+import CoreData
 
 class MemoContentsViewController: UIViewController {
     private var memoTextView: UITextView = {
