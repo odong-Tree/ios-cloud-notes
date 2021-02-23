@@ -115,7 +115,7 @@ extension MemoListTableViewController {
         let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         let shareAction = UIAlertAction(title: "Share", style: .default, handler: { [self]
-            (action: UIAlertAction) in showActivityView(title: memoList[selectedMemo].title, body: memoList[selectedMemo].body, date: memoList[selectedMemo].lastModifiedDateString)
+            (action: UIAlertAction) in showActivityView(memo: memoList[selectedMemo])
         })
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
@@ -138,7 +138,6 @@ extension MemoListTableViewController {
         let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
             (action: UIAlertAction) in self.deleteMemo()
         })
-        
         deleteMenu.addAction(cancleAction)
         deleteMenu.addAction(deleteAction)
         
@@ -148,8 +147,8 @@ extension MemoListTableViewController {
 
 // MARK: UIActivityViewController
 extension MemoListTableViewController {
-    private func showActivityView(title: String, body: String, date: String) {
-        let memoToShare = [title, body, date]
+    private func showActivityView(memo: Memo) {
+        let memoToShare = [memo.title, memo.body, memo.lastModifiedDateString]
         let activityViewController = UIActivityViewController(activityItems: memoToShare, applicationActivities: nil)
         
         self.present(activityViewController, animated: true, completion: nil)
