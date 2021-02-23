@@ -57,7 +57,7 @@ class MemoListTableViewController: UITableViewController {
     }
     
     private func deleteMemo() {
-        let indexPath = IndexPath(item: 0, section: 0)
+        let indexPath = IndexPath(row: 0, section: 0)
         memoList.remove(at: indexPath.item)
         tableView.deleteRows(at: [indexPath], with: .fade)
     }
