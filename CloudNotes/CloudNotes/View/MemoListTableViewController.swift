@@ -98,21 +98,31 @@ extension MemoListTableViewController {
         let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         let shareAction = UIAlertAction(title: "Share", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (action: UIAlertAction) in print("share 선택 -> 액티비티뷰 전환")
         })
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (action: UIAlertAction) in self.showDeleteMessage()
         })
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         actionMenu.addAction(shareAction)
         actionMenu.addAction(deleteAction)
         actionMenu.addAction(cancelAction)
         
         self.present(actionMenu, animated: true, completion: nil)
+    }
+    
+    private func showDeleteMessage() {
+        let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
+        
+        let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: nil)
+        
+        deleteMenu.addAction(cancleAction)
+        deleteMenu.addAction(deleteAction)
+        
+        present(deleteMenu, animated: true, completion: nil)
     }
 }
