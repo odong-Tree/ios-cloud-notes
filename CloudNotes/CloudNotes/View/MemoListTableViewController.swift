@@ -55,6 +55,12 @@ class MemoListTableViewController: UITableViewController {
     @objc func showActionSheet(sender: UIButton) {
         showActionSheetMessage()
     }
+    
+    private func deleteMemo() {
+        let indexPath = IndexPath(item: 0, section: 0)
+        memoList.remove(at: indexPath.item)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
 }
 
 // MARK: UITableViewDelegate
@@ -118,7 +124,9 @@ extension MemoListTableViewController {
         let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
         
         let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: nil)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
+            (action: UIAlertAction) in self.deleteMemo()
+        })
         
         deleteMenu.addAction(cancleAction)
         deleteMenu.addAction(deleteAction)
