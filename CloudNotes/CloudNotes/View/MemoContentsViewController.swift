@@ -2,6 +2,8 @@ import UIKit
 import CoreData
 
 class MemoContentsViewController: UIViewController {
+    var memoData: [NSManagedObject] = []
+    
     private var memoTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -10,6 +12,27 @@ class MemoContentsViewController: UIViewController {
         
         return textView
     }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+
+      guard let appDelegate =
+        UIApplication.shared.delegate as? AppDelegate else {
+          return
+      }
+
+      let managedContext =
+        appDelegate.persistentContainer.viewContext
+
+      let fetchRequest =
+        NSFetchRequest<NSManagedObject>(entityName: "MemoCoreData")
+
+      do {
+        memoData = try managedContext.fetch(fetchRequest)
+      } catch let error as NSError {
+        print("Could not fetch. \(error), \(error.userInfo)")
+      }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

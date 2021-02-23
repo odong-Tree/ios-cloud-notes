@@ -1,10 +1,15 @@
 import UIKit
+import CoreData
 
 class MemoListTableViewController: UITableViewController {
     var memoList = [Memo]()
     var isCellSelected: Bool = false
     private let plusButton = UIButton()
     private var selectedMemo: Int = 0
+    
+    lazy var memoData: [NSManagedObject] = {
+        return self.fetch()
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,16 +46,82 @@ class MemoListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return memoList.count
+        return self.memoData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell") as? MemoListTableViewCell else {
             return UITableViewCell()
         }
-        cell.receiveLabelsText(memo: memoList[indexPath.row])
+        let record = self.memoData[indexPath.row]
+        
+        cell.listTitleLabel.text = record.value(forKey: "title") as? String
+        cell.listShortBodyLabel.text = record.value(forKey: "body") as? String
+        cell.listLastModifiedDateLabel.text = record.value(forKey: "lastModified") as? String
         
         return cell
+    }
+    
+    func fetch() -> [NSManagedObject] {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "MemoCoreData")
+        
+        let result = try! managedContext.fetch(fetchRequest)
+        return result
+    }
+    
+    func save(title: String, body: String, lastModified: String) {
+        let appDelegate =
+                UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        let object = NSEntityDescription.insertNewObject(forEntityName: "MemoCoreData", into: managedContext)
+        object.setValue(title, forKey: "title")
+        object.setValue(body, forKey: "body")
+        object.setValue(lastModified, forKey: "lastModified")
+        
+        do {
+            try managedContext.save()
+            self.memoData.insert(object, at: 0)
+        } catch {
+            managedContext.rollback()
+        }
+    }
+    
+    func delete(object: NSManagedObject) {
+        let appDelegate =
+                UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        managedContext.delete(object)
+        
+        do {
+            try managedContext.save()
+        } catch {
+            managedContext.rollback()
+        }
+    }
+    
+    func update(object: NSManagedObject, title: String, body: String, lastModified: String) {
+        let appDelegate =
+                UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        object.setValue(title, forKey: "title")
+        object.setValue(body, forKey: "body")
+        object.setValue(lastModified, forKey: "lastModified")
+        
+        do {
+            try managedContext.save()
+        } catch {
+            managedContext.rollback()
+        }
+        tableView.reloadData()
     }
     
     @objc func showActionSheet(sender: UIButton) {
@@ -79,6 +150,7 @@ extension MemoListTableViewController {
         let memoContentsView = MemoContentsViewController()
         memoContentsView.receiveText(memo: memoList[indexPath.row])
         self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        update(object: memoData[selectedMemo], title: "코어데이터test", body: "ttest", lastModified: "123123")
         
         isCellSelected = true
         selectedMemo = indexPath.row
