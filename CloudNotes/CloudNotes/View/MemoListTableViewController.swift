@@ -130,12 +130,15 @@ class MemoListTableViewController: UITableViewController {
     
     private func deleteMemo() {
         let indexPath = IndexPath(row: selectedMemo, section: 0)
-        memoList.remove(at: indexPath.row)
+        
+        delete(object: self.memoData[indexPath.row])
+        
+        self.memoData.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
         selectedMemo = 0
         
         let memoContentsView = MemoContentsViewController()
-        memoContentsView.receiveText(memo: memoList[0])
+        memoContentsView.receiveText(object: self.memoData[0])
         
         if UITraitCollection.current.horizontalSizeClass == .regular {
             self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
@@ -148,9 +151,8 @@ class MemoListTableViewController: UITableViewController {
 extension MemoListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let memoContentsView = MemoContentsViewController()
-        memoContentsView.receiveText(memo: memoList[indexPath.row])
+        memoContentsView.receiveText(object: self.memoData[indexPath.row])
         self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
-        update(object: memoData[selectedMemo], title: "코어데이터test", body: "ttest", lastModified: "123123")
         
         isCellSelected = true
         selectedMemo = indexPath.row

@@ -2,7 +2,13 @@ import UIKit
 import CoreData
 
 class MemoContentsViewController: UIViewController {
-    var memoData: [NSManagedObject] = []
+    let memoTableView = MemoListTableViewController()
+    private let disclosureButton = UIButton()
+    private var selectedMemo: Int = 0
+    
+    lazy var memoData: [NSManagedObject] = {
+        return self.fetch()
+    }()
     
     private var memoTextView: UITextView = {
         let textView = UITextView()
@@ -13,32 +19,101 @@ class MemoContentsViewController: UIViewController {
         return textView
     }()
     
-    override func viewWillAppear(_ animated: Bool) {
-      super.viewWillAppear(animated)
-
-      guard let appDelegate =
-        UIApplication.shared.delegate as? AppDelegate else {
-          return
-      }
-
-      let managedContext =
-        appDelegate.persistentContainer.viewContext
-
-      let fetchRequest =
-        NSFetchRequest<NSManagedObject>(entityName: "MemoCoreData")
-
-      do {
-        memoData = try managedContext.fetch(fetchRequest)
-      } catch let error as NSError {
-        print("Could not fetch. \(error), \(error.userInfo)")
-      }
+    func fetch() -> [NSManagedObject] {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "MemoCoreData")
+        
+        let result = try! managedContext.fetch(fetchRequest)
+        return result
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureNavigationBar()
         configureMemoContentsView()
         configureAutoLayout()
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: disclosureButton)
+        configurePlusButton()
+    }
+    
+    private func configurePlusButton() {
+        disclosureButton.translatesAutoresizingMaskIntoConstraints = false
+        disclosureButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        disclosureButton.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
+    }
+    
+    @objc func showActionSheet(sender: UIButton) {
+        showActionSheetMessage()
+    }
+    
+    private func showActionSheetMessage() {
+        let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        
+        let shareAction = UIAlertAction(title: "Share", style: .default, handler: nil)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
+            (action: UIAlertAction) in self.showDeleteMessage()
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionMenu.addAction(shareAction)
+        actionMenu.addAction(deleteAction)
+        actionMenu.addAction(cancelAction)
+        
+        self.present(actionMenu, animated: true, completion: nil)
+    }
+    
+    private func showDeleteMessage() {
+        let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
+        
+        let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
+            (action: UIAlertAction) in self.deleteMemo()
+        })
+        deleteMenu.addAction(cancleAction)
+        deleteMenu.addAction(deleteAction)
+        
+        present(deleteMenu, animated: true, completion: nil)
+    }
+    
+    private func deleteMemo() {
+        let indexPath = IndexPath(row: selectedMemo, section: 0)
+        
+        delete(object: self.memoData[indexPath.row])
+        
+        self.memoData.remove(at: indexPath.row)
+        memoTableView.tableView.deleteRows(at: [indexPath], with: .fade)
+        selectedMemo = 0
+        
+        let memoContentsView = MemoContentsViewController()
+        memoContentsView.receiveText(object: self.memoData[0])
+        
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        }
+//        isCellSelected = true
+    }
+    
+    func delete(object: NSManagedObject) {
+        let appDelegate =
+                UIApplication.shared.delegate as! AppDelegate
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        managedContext.delete(object)
+        
+        do {
+            try managedContext.save()
+        } catch {
+            managedContext.rollback()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -66,9 +141,9 @@ class MemoContentsViewController: UIViewController {
         ])
     }
     
-    func receiveText(memo: Memo) {
-        let title = memo.title
-        let body = "\n" + "\n" + "010-2222-4444 " + memo.body + "\n" + "https://www.google.com"
+    func receiveText(object: NSManagedObject) {
+        let title = object.value(forKey: "title") as? String ?? ""
+        let body = object.value(forKey: "body") as? String ?? ""
         let titleFontSize = UIFont.preferredFont(forTextStyle: .largeTitle)
         let bodyFontSize = UIFont.preferredFont(forTextStyle: .body)
         
