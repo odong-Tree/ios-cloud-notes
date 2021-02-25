@@ -26,6 +26,7 @@ class MemoListTableViewController: UITableViewController {
     
     @objc func changeIsCellSelected() {
         isCellSelected = false
+        tableView.reloadData()
     }
     
     private func configureNavigationBar() {

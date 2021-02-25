@@ -27,7 +27,7 @@ class MemoContentsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.post(name: NSNotification.Name("ShowTableView"), object: nil)
+        memoUpdate()
     }
     
     private func configureDisclosureButton() {
@@ -82,6 +82,7 @@ class MemoContentsViewController: UIViewController {
     @objc func dismissButton(_ sender: UIButton) {
         memoTextView.resignFirstResponder()
         navigationItem.rightBarButtonItems?.removeFirst()
+        memoUpdate()
     }
     
     @objc func showActionSheet(_ sender: UIButton) {
@@ -133,12 +134,21 @@ class MemoContentsViewController: UIViewController {
 //            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
 //        }
     }
+    
+    func memoUpdate() {
+        CoreDataSingleton.shared.update(object: CoreDataSingleton.shared.memoData[selectedMemo], title: "blue", body: self.memoTextView.text)
+        NotificationCenter.default.post(name: NSNotification.Name("ShowTableView"), object: nil)
+    }
 }
 
 // MARK: UITextViewDelegate
 extension MemoContentsViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         memoTextView.isEditable = false
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        memoUpdate()
     }
 }
 
