@@ -67,6 +67,9 @@ class MemoContentsViewController: UIViewController {
         actionMenu.addAction(deleteAction)
         actionMenu.addAction(cancelAction)
         
+        actionMenu.popoverPresentationController?.sourceView = disclosureButton
+        actionMenu.popoverPresentationController?.sourceRect = disclosureButton.bounds
+        
         self.present(actionMenu, animated: true, completion: nil)
     }
     

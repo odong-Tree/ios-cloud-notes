@@ -42,7 +42,18 @@ class MemoListTableViewController: UITableViewController {
     private func configurePlusButton() {
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
+        plusButton.addTarget(self, action: #selector(createMemo), for: .touchUpInside)
+    }
+    
+    @objc func createMemo(sender: UIButton) {
+        save(title: "green", body: "red", lastModified: "black")
+        
+        let memoContentsView = MemoContentsViewController()
+        memoContentsView.receiveText(object: self.memoData[0])
+        tableView.reloadData()
+        self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        
+        isCellSelected = true
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -123,28 +134,6 @@ class MemoListTableViewController: UITableViewController {
         }
         tableView.reloadData()
     }
-    
-    @objc func showActionSheet(sender: UIButton) {
-        showActionSheetMessage()
-    }
-    
-    private func deleteMemo() {
-        let indexPath = IndexPath(row: selectedMemo, section: 0)
-        
-        delete(object: self.memoData[indexPath.row])
-        
-        self.memoData.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
-        selectedMemo = 0
-        
-        let memoContentsView = MemoContentsViewController()
-        memoContentsView.receiveText(object: self.memoData[0])
-        
-        if UITraitCollection.current.horizontalSizeClass == .regular {
-            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
-        }
-        isCellSelected = true
-    }
 }
 
 // MARK: UITableViewDelegate
@@ -184,47 +173,14 @@ extension MemoListTableViewController {
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
-    
-    private func showActionSheetMessage() {
-        let actionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
-        
-        let shareAction = UIAlertAction(title: "Share", style: .default, handler: { [self]
-            (action: UIAlertAction) in showActivityView(memo: memoList[selectedMemo])
-        })
-        
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
-            (action: UIAlertAction) in self.showDeleteMessage()
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        actionMenu.addAction(shareAction)
-        actionMenu.addAction(deleteAction)
-        actionMenu.addAction(cancelAction)
-        
-        self.present(actionMenu, animated: true, completion: nil)
-    }
-    
-    private func showDeleteMessage() {
-        let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
-        
-        let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
-            (action: UIAlertAction) in self.deleteMemo()
-        })
-        deleteMenu.addAction(cancleAction)
-        deleteMenu.addAction(deleteAction)
-        
-        present(deleteMenu, animated: true, completion: nil)
-    }
 }
 
-// MARK: UIActivityViewController
-extension MemoListTableViewController {
-    private func showActivityView(memo: Memo) {
-        let memoToShare = [memo.title, memo.body, memo.lastModifiedDateString]
-        let activityViewController = UIActivityViewController(activityItems: memoToShare, applicationActivities: nil)
-        
-        self.present(activityViewController, animated: true, completion: nil)
-    }
-}
+//// MARK: UIActivityViewController
+//extension MemoListTableViewController {
+//    private func showActivityView(memo: Memo) {
+//        let memoToShare = [memo.title, memo.body, memo.lastModifiedDateString]
+//        let activityViewController = UIActivityViewController(activityItems: memoToShare, applicationActivities: nil)
+//
+//        self.present(activityViewController, animated: true, completion: nil)
+//    }
+//}
