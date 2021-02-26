@@ -55,7 +55,7 @@ class MemoListTableViewController: UITableViewController {
     }
     
     @objc func createMemo(sender: UIButton) {
-        CoreDataSingleton.shared.save(title: "green", body: "red")
+        CoreDataSingleton.shared.save(title: "테스트", body: "컬러")
         
         let memoContentsView = MemoContentsViewController()
         memoContentsView.receiveText(memo: CoreDataSingleton.shared.memoData[0])

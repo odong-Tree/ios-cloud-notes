@@ -5,7 +5,6 @@ class MemoContentsViewController: UIViewController {
     private var selectedMemo: Int = 0
     let disclosureButton = UIButton()
     
-//    private let disclosureButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), style: .plain, target: self, action: #selector(showActionSheet))
     private let finishButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(dismissButton))
     
     private var memoTextView: UITextView = {
@@ -13,7 +12,7 @@ class MemoContentsViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.adjustsFontForContentSizeCategory = true
         textView.dataDetectorTypes = .all
-
+        
         return textView
     }()
     
@@ -27,7 +26,7 @@ class MemoContentsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        memoUpdate()
+        NotificationCenter.default.post(name: NSNotification.Name("ShowTableView"), object: nil)
     }
     
     private func configureDisclosureButton() {
@@ -69,7 +68,7 @@ class MemoContentsViewController: UIViewController {
         guard let memoBody: String = memo.value(forKey: "body") as? String else {
             return
         }
-        let body: String = "\n" + "\n" + "010-2222-4444 " + memoBody + "\n" + "https://www.google.com"
+        let body: String = "\n" + memoBody
         let titleFontSize = UIFont.preferredFont(forTextStyle: .largeTitle)
         let bodyFontSize = UIFont.preferredFont(forTextStyle: .body)
         
@@ -94,7 +93,7 @@ class MemoContentsViewController: UIViewController {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {
             (action: UIAlertAction) in self.showDeleteMessage()
         })
-         
+        
         actionSheet.addAction(shareAction)
         actionSheet.addAction(deleteAction)
         actionSheet.addAction(cancelAction)
@@ -106,17 +105,17 @@ class MemoContentsViewController: UIViewController {
     }
     
     private func showDeleteMessage() {
-         let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
-         
-         let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let deleteMenu = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: UIAlertController.Style.alert)
+        
+        let cancleAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             self.deleteMemo()
         }
-         deleteMenu.addAction(cancleAction)
-         deleteMenu.addAction(deleteAction)
-         
-         present(deleteMenu, animated: true, completion: nil)
-     }
+        deleteMenu.addAction(cancleAction)
+        deleteMenu.addAction(deleteAction)
+        
+        present(deleteMenu, animated: true, completion: nil)
+    }
     
     private func deleteMemo() {
         let indexPath = IndexPath(row: selectedMemo, section: 0)
@@ -127,17 +126,41 @@ class MemoContentsViewController: UIViewController {
         NotificationCenter.default.post(name: NSNotification.Name("deleteCell"), object: nil, userInfo: ["cellIndexNumber": selectedMemo])
         selectedMemo = 0
         
-//        let memoContentsView = MemoContentsViewController()
+        //        let memoContentsView = MemoContentsViewController()
         self.receiveText(memo: CoreDataSingleton.shared.memoData[0])
         
-//        if UITraitCollection.current.horizontalSizeClass == .regular {
-//            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
-//        }
+        //        if UITraitCollection.current.horizontalSizeClass == .regular {
+        //            self.splitViewController?.showDetailViewController(memoContentsView, sender: nil)
+        //        }
     }
     
     func memoUpdate() {
-        CoreDataSingleton.shared.update(object: CoreDataSingleton.shared.memoData[selectedMemo], title: "blue", body: self.memoTextView.text)
+        let splitText = splitString()
+        
+        CoreDataSingleton.shared.update(object: CoreDataSingleton.shared.memoData[selectedMemo], title: splitText.0, body: splitText.1)
         NotificationCenter.default.post(name: NSNotification.Name("ShowTableView"), object: nil)
+    }
+    
+    func splitString() -> (String, String) {
+        var titleText: String = ""
+        var bodyText: String = ""
+        
+        let arr = memoTextView.text.split(separator: "\n").map { (value) -> String in
+            return String(value) }
+        
+        switch arr.count {
+        case 0:
+            titleText = ""
+            bodyText = ""
+        case 1:
+            titleText = arr[0]
+        default:
+            titleText = arr[0]
+            for i in 1...(arr.count - 1) {
+                bodyText += (arr[i] + "\n")
+            }
+        }
+        return (titleText, bodyText)
     }
 }
 
@@ -149,6 +172,13 @@ extension MemoContentsViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         memoUpdate()
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            print("enter gogogogo")
+        }
+        return true
     }
 }
 
@@ -199,7 +229,7 @@ extension MemoContentsViewController: UIGestureRecognizerDelegate {
 
 // MARK: UIActivityViewController
 extension MemoContentsViewController {
-    private func showActivityView(memo: NSManagedObject) {
+    @objc func showActivityView(memo: NSManagedObject) {
         guard let title: String = memo.value(forKey: "title") as? String else {
             return
         }
@@ -208,7 +238,7 @@ extension MemoContentsViewController {
         }
         let memoToShare = [title, body]
         let activityViewController = UIActivityViewController(activityItems: memoToShare, applicationActivities: nil)
-
+        
         self.present(activityViewController, animated: true, completion: nil)
     }
 }
