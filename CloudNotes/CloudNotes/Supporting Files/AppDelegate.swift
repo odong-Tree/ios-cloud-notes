@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import SwiftyDropbox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = MemoSplitViewController()
             window?.makeKeyAndVisible()
         }
-
+        DropboxClientsManager.setupWithAppKey("667o7v3ukasexog")
+        
         return true
     }
 
