@@ -1,4 +1,5 @@
 import UIKit
+import SwiftyDropbox
 
 protocol TableViewListManagable: class {
     func updateTableViewList()
@@ -135,5 +136,25 @@ extension MemoListTableViewController: TableViewListManagable {
         
         self.tableView.moveRow(at: indexPath, to: firstIndexPath)
         UserDefaults.standard.set(0, forKey: UserDefaultsKeys.selectedMemoIndexPathRow.rawValue)
+    }
+}
+
+extension MemoListTableViewController {
+    func loginDropbox() {
+        DropboxClientsManager.authorizeFromController(UIApplication.shared,
+                                                      controller: self,
+                                                      openURL: { (url: URL) -> Void in
+                                                        UIApplication.shared.openURL(url)
+                                                      })
+        
+      let scopeRequest = ScopeRequest(scopeType: .user, scopes: ["account_info.read"], includeGrantedScopes: false)
+        
+      DropboxClientsManager.authorizeFromControllerV2(
+          UIApplication.shared,
+          controller: self,
+          loadingStatusDelegate: nil,
+          openURL: { (url: URL) -> Void in UIApplication.shared.openURL(url) },
+          scopeRequest: scopeRequest
+      )
     }
 }
