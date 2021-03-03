@@ -8,6 +8,8 @@ protocol TableViewListManagable: class {
 }
 
 class MemoListTableViewController: UITableViewController {
+    let client = DropboxClientsManager.authorizedClient
+    
     private let enrollButton = UIButton()
     
     override func viewDidLoad() {
@@ -45,6 +47,7 @@ class MemoListTableViewController: UITableViewController {
             showContentsViewController(index: 0)
             tableView.reloadData()
             UserDefaults.standard.set(true, forKey: UserDefaultsKeys.isCellSelected.rawValue)
+//            loginDropbox()
         } catch {
             print(MemoAppError.system.message)
         }
