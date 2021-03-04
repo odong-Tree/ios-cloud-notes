@@ -49,6 +49,7 @@ class CoreDataSingleton {
             self.memoData.insert(object, at: 0)
         } catch {
             managedContext.rollback()
+            print(MemoAppError.system.message)
         }
     }
     
@@ -65,6 +66,7 @@ class CoreDataSingleton {
             try managedContext.save()
         } catch {
             managedContext.rollback()
+            print(MemoAppError.system.message)
         }
     }
     
@@ -83,6 +85,7 @@ class CoreDataSingleton {
             try managedContext.save()
         } catch {
             managedContext.rollback()
+            print(MemoAppError.system.message)
         }
     }
 }

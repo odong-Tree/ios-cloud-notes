@@ -47,7 +47,6 @@ class MemoListTableViewController: UITableViewController {
             showContentsViewController(index: 0)
             tableView.reloadData()
             UserDefaults.standard.set(true, forKey: UserDefaultsKeys.isCellSelected.rawValue)
-//            loginDropbox()
         } catch {
             print(MemoAppError.system.message)
         }
@@ -144,20 +143,30 @@ extension MemoListTableViewController: TableViewListManagable {
 
 extension MemoListTableViewController {
     func loginDropbox() {
-        DropboxClientsManager.authorizeFromController(UIApplication.shared,
-                                                      controller: self,
-                                                      openURL: { (url: URL) -> Void in
-                                                        UIApplication.shared.openURL(url)
-                                                      })
-        
       let scopeRequest = ScopeRequest(scopeType: .user, scopes: ["account_info.read"], includeGrantedScopes: false)
         
       DropboxClientsManager.authorizeFromControllerV2(
           UIApplication.shared,
           controller: self,
           loadingStatusDelegate: nil,
-          openURL: { (url: URL) -> Void in UIApplication.shared.openURL(url) },
+        openURL: { (url: URL) -> Void in UIApplication.shared.open(url) },
           scopeRequest: scopeRequest
       )
+    }
+    
+    func uploadDropbox() {
+        let fileData = "testing data example".data(using: String.Encoding.utf8, allowLossyConversion: false)!
+
+        let request = client?.files.upload(path: "Users/chanwoo/Library/Developer/CoreSimulator/Devices/79751B1A-FDC8-4F9E-99A0-8734F6B3E6CD/data/Containers/Data/Application/5DF01620-9F8B-4920-BB22-82B23377FFC4/Documents/", input: fileData)
+            .response { response, error in
+                if let response = response {
+                    print(response)
+                } else if let error = error {
+                    print(error)
+                }
+            }
+            .progress { progressData in
+                print(progressData)
+            }
     }
 }

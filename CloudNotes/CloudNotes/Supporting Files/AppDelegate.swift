@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         DropboxClientsManager.setupWithAppKey("667o7v3ukasexog")
         
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+         print(urls[urls.count-1] as URL)
+        
         return true
     }
 
