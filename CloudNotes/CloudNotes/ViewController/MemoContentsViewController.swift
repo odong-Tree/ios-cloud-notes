@@ -203,8 +203,11 @@ extension MemoContentsViewController {
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
         let actionSheet = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        let loginAction = UIAlertAction(title: "upload Dropbox", style: .destructive) { _ in
+        let loginAction = UIAlertAction(title: "Upload Dropbox", style: .destructive) { _ in
             self.uploadDropbox()
+        }
+        let downloadAction = UIAlertAction(title: "Download Dropbox", style: .destructive) { _ in
+            self.downloadDropbox()
         }
         let shareAction = UIAlertAction(title: "Share", style: .default) { _ in
             self.showActivityView(memo: CoreDataSingleton.shared.memoData[0])
@@ -251,5 +254,8 @@ extension MemoContentsViewController {
             .progress { progressData in
                 print(progressData)
             }
+    }
+    
+    func downloadDropbox() {
     }
 }
