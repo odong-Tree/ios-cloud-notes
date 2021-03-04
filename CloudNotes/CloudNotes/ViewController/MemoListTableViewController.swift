@@ -19,7 +19,7 @@ class MemoListTableViewController: UITableViewController {
         UserDefaults.standard.set(false, forKey: UserDefaultsKeys.isCellSelected.rawValue)
         tableView.register(MemoListTableViewCell.self, forCellReuseIdentifier: "MemoCell")
         
-        loginDropbox()
+        showLoginDropboxMessage()
     }
     
     private func configureNavigationBar() {
@@ -38,7 +38,7 @@ class MemoListTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell") as? MemoListTableViewCell else {
             return UITableViewCell()
         }
-
+        
         cell.receiveLabelsText(memo: memo)
         return cell
     }
@@ -109,6 +109,19 @@ extension MemoListTableViewController {
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
+    
+    private func showLoginDropboxMessage() {
+        let dropboxMenu = UIAlertController(title: "Login Dropbox", message: "Are you sure you want to log in to the dropbox?", preferredStyle: UIAlertController.Style.alert)
+        
+        let cancleAction = UIAlertAction(title: "CANCLE", style: .cancel, handler: nil)
+        let loginAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+            self.loginDropbox()
+        }
+        dropboxMenu.addAction(cancleAction)
+        dropboxMenu.addAction(loginAction)
+        
+        present(dropboxMenu, animated: true, completion: nil)
+    }
 }
 
 // MARK: TableViewListManagable
@@ -145,20 +158,20 @@ extension MemoListTableViewController: TableViewListManagable {
 
 extension MemoListTableViewController {
     func loginDropbox() {
-      let scopeRequest = ScopeRequest(scopeType: .user, scopes: ["account_info.read"], includeGrantedScopes: false)
+        let scopeRequest = ScopeRequest(scopeType: .user, scopes: ["account_info.read"], includeGrantedScopes: false)
         
-      DropboxClientsManager.authorizeFromControllerV2(
-          UIApplication.shared,
-          controller: self,
-          loadingStatusDelegate: nil,
-        openURL: { (url: URL) -> Void in UIApplication.shared.open(url) },
-          scopeRequest: scopeRequest
-      )
+        DropboxClientsManager.authorizeFromControllerV2(
+            UIApplication.shared,
+            controller: self,
+            loadingStatusDelegate: nil,
+            openURL: { (url: URL) -> Void in UIApplication.shared.open(url) },
+            scopeRequest: scopeRequest
+        )
     }
     
     func uploadDropbox() {
         let fileData = "testing data example".data(using: String.Encoding.utf8, allowLossyConversion: false)!
-
+        
         let request = client?.files.upload(path: "Users/chanwoo/Library/Developer/CoreSimulator/Devices/79751B1A-FDC8-4F9E-99A0-8734F6B3E6CD/data/Containers/Data/Application/5DF01620-9F8B-4920-BB22-82B23377FFC4/Documents/", input: fileData)
             .response { response, error in
                 if let response = response {
