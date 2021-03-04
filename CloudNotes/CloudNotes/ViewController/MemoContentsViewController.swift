@@ -1,8 +1,11 @@
 import UIKit
 import CoreData
+import SwiftyDropbox
 
 class MemoContentsViewController: UIViewController {
     weak var delegate: TableViewListManagable?
+    
+    let client = DropboxClientsManager.authorizedClient
     
     var memoTextView: UITextView = {
         let textView = UITextView()
@@ -199,6 +202,10 @@ extension MemoContentsViewController {
     
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
         let actionSheet = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        
+        let loginAction = UIAlertAction(title: "upload Dropbox", style: .destructive) { _ in
+            self.uploadDropbox()
+        }
         let shareAction = UIAlertAction(title: "Share", style: .default) { _ in
             self.showActivityView(memo: CoreDataSingleton.shared.memoData[0])
         }
@@ -207,6 +214,7 @@ extension MemoContentsViewController {
             _ in self.showDeleteMessage()
         }
         
+        actionSheet.addAction(loginAction)
         actionSheet.addAction(shareAction)
         actionSheet.addAction(deleteAction)
         actionSheet.addAction(cancelAction)
@@ -227,5 +235,21 @@ extension MemoContentsViewController {
         
         activityViewController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
         self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    func uploadDropbox() {
+        let fileData = "testing data example".data(using: String.Encoding.utf8, allowLossyConversion: false)!
+        
+        let request = client?.files.upload(path: "Users/chanwoo/Library/Developer/CoreSimulator/Devices/79751B1A-FDC8-4F9E-99A0-8734F6B3E6CD/data/Containers/Data/Application/5DF01620-9F8B-4920-BB22-82B23377FFC4/Documents/", input: fileData)
+            .response { response, error in
+                if let response = response {
+                    print(response)
+                } else if let error = error {
+                    print(error)
+                }
+            }
+            .progress { progressData in
+                print(progressData)
+            }
     }
 }
