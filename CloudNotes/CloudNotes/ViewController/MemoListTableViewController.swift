@@ -18,6 +18,8 @@ class MemoListTableViewController: UITableViewController {
         configureNavigationBar()
         UserDefaults.standard.set(false, forKey: UserDefaultsKeys.isCellSelected.rawValue)
         tableView.register(MemoListTableViewCell.self, forCellReuseIdentifier: "MemoCell")
+        
+        loginDropbox()
     }
     
     private func configureNavigationBar() {
