@@ -218,6 +218,7 @@ extension MemoContentsViewController {
         }
         
         actionSheet.addAction(loginAction)
+        actionSheet.addAction(downloadAction)
         actionSheet.addAction(shareAction)
         actionSheet.addAction(deleteAction)
         actionSheet.addAction(cancelAction)
@@ -241,21 +242,37 @@ extension MemoContentsViewController {
     }
     
     func uploadDropbox() {
-        let fileData = "testing data example".data(using: String.Encoding.utf8, allowLossyConversion: false)!
-        
-        let request = client?.files.upload(path: "Users/chanwoo/Library/Developer/CoreSimulator/Devices/79751B1A-FDC8-4F9E-99A0-8734F6B3E6CD/data/Containers/Data/Application/5DF01620-9F8B-4920-BB22-82B23377FFC4/Documents/", input: fileData)
-            .response { response, error in
+        let path = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+        for file in CloudFile.fileNames {
+            let documentsDirectory = path[0].appendingPathComponent(file)
+            client?.files.upload(path: file, mode: .overwrite, autorename: false, clientModified: nil, mute: true, input: documentsDirectory).response {
+                response, error in
+                if let error = error {
+                    debugPrint(error)
+                }
                 if let response = response {
-                    print(response)
-                } else if let error = error {
-                    print(error)
+                    debugPrint(response)
                 }
             }
-            .progress { progressData in
-                print(progressData)
-            }
+        }
     }
     
     func downloadDropbox() {
+        let directoryURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        for file in CloudFile.fileNames {
+            let destinationURL = directoryURL.appendingPathComponent(file)
+            let destination: (URL, HTTPURLResponse) -> URL = { temporaryURL, response in
+                return destinationURL
+            }
+            client?.files.download(path: file, overwrite: true, destination: destination).response { response, error in
+                if let error = error {
+                    debugPrint(error)
+                }
+                if let response = response {
+                    CoreDataSingleton.shared.fetch()
+                    debugPrint(response)
+                }
+            }
+        }
     }
 }
