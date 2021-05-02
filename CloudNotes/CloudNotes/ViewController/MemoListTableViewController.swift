@@ -180,7 +180,6 @@ extension MemoListTableViewController: TableViewListManagable {
         try CoreDataSingleton.shared.delete(object: CoreDataSingleton.shared.memoData[indexPathRowToDelete])
         CoreDataSingleton.shared.memoData.remove(at: indexPathRowToDelete)
         
-        searchList.remove(at: indexPathRow)
         tableView.reloadData()
         UserDefaults.standard.set(0, forKey: UserDefaultsKeys.selectedMemoIndexPathRow.rawValue)
     }
