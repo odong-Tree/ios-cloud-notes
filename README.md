@@ -109,7 +109,9 @@ protocol TableViewListManagable: class {
 
 ```
 
- Delegation 패턴은 protocol을 사용하기 때문에 Notification보다 명확한 메서드를 사용할 수 있다는 점이 좋았습니다. 또한 제 3의 객체인 NotificationCenter을 사용하는 것보다 코드를 구조적으로 작성하고 관리하고 용이했습니다.
+ Delegation 패턴은 protocol을 사용하기 때문에 Notification보다 명확한 메서드를 사용할 수 있다는 점이 좋았습니다. 또한 제 3의 객체인 NotificationCenter을 사용하는 것보다 코드를 구조적으로 작성하고 관리하고 용이했습니다. <br>
+ 
+ 하지만 이때 NotificationCenter에 비해 객체 간의 결합도 측면에서는 불리해지기도 했습니다. (TableViewListManagable를 채택하는 프로퍼티를 만들어 할당해주어야하기 때문.) 그러나 Delegate 패턴으로서 얻는 가독성과 명확해진 객체 간의 관계의 이점이 더 크다고 생각하여 결과적으로 Delegate 패턴을 채택하게 되었습니다.
  
  <br>
 
